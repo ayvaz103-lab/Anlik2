@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ege Gold Kuyumculuk | Canlı Fiyatlar</title>
+
+<style>
+html, body{
+    margin:0;
+    padding:0;
+    height:100%;
+    overflow:hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ALTIN ARKAPLAN */
+body{
+    background: linear-gradient(135deg,#d4af37,#f7e7a1,#c9a227);
+    display:flex;
+    flex-direction:column;
+}
+
+/* ÜST ALAN */
+.header{
+    position:relative;
+    text-align:center;
+    padding:25px 10px;
+    background: linear-gradient(90deg,#8a6a00,#d4af37);
+    color:white;
+    font-size:42px;
+    font-weight:900;
+    letter-spacing:2px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.25);
+}
+
+.sub{
+    font-size:18px;
+    font-weight:500;
+    margin-top:8px;
+    opacity:0.9;
+}
+
+/* YENİLE BUTONU */
+.refresh-btn{
+    position:absolute;
+    right:30px;
+    top:30px;
+    background:white;
+    color:#8a6a00;
+    border:none;
+    padding:12px 20px;
+    font-size:16px;
+    font-weight:700;
+    border-radius:10px;
+    cursor:pointer;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    transition:0.2s;
+}
+
+.refresh-btn:hover{
+    transform:scale(1.05);
+}
+
+/* İFRAME */
+.content{
+    flex:1;
+}
+
+iframe{
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+/* ALT */
+.footer{
+    text-align:center;
+    padding:10px;
+    font-size:14px;
+    background:rgba(0,0,0,0.1);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    EGE GOLD KUYUMCULUK
+    <div class="sub">Anlık Altın & Döviz Fiyatları</div>
+
+    <button class="refresh-btn" onclick="yenile()">Yenile</button>
+</div>
+
+<div class="content">
+    <iframe id="priceFrame" src="https://sukobfiyat.com/mobil.html"></iframe>
+</div>
+
+<div class="footer">
+    Fiyatlar bilgilendirme amaçlıdır.
+</div>
+
+<script>
+function yenile(){
+    document.getElementById("priceFrame").src =
+        "https://sukobfiyat.com/mobil.html?ts=" + new Date().getTime();
+}
+
+/* 60 saniyede otomatik yenile */
+setInterval(yenile, 60000);
+</script>
+
+</body>
+</html>
