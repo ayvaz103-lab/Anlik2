@@ -21,31 +21,27 @@
         <header>EGE GOLD KUYUMCULUK</header>
         <table>
             <tbody id="priceBody">
-                <tr id="GA"><td>24 Ayar Gram</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="22AYAR"><td>22 Ayar Gram</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="14AYAR"><td>14 Ayar Altın</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="CEYREK_YENI"><td>Yeni Çeyrek</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="ATA5_YENI"><td>Ata 5'li</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="USDTRY"><td>Dolar (USD)</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="EURTRY"><td>Euro (EUR)</td><td class="buy">---</td><td class="sell">---</td></tr>
+                <tr id="GA"><td>24 Ayar Gram</td><td class="buy">Bekleyin...</td><td class="sell">Bekleyin...</td></tr>
+                <tr id="22AYAR"><td>22 Ayar Gram</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="14AYAR"><td>14 Ayar Altın</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="CEYREK_YENI"><td>Yeni Çeyrek</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="ATA5_YENI"><td>Ata 5'li</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="USDTRY"><td>Dolar (USD)</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="EURTRY"><td>Euro (EUR)</td><td class="buy">...</td><td class="sell">...</td></tr>
             </tbody>
         </table>
-        <footer>ŞANLIURFA<div id="status" style="font-size: 1.5vh; color: #444;">Canlı Veriler Yükleniyor...</div></footer>
+        <footer>ŞANLIURFA<div id="status" style="font-size: 1.5vh; color: #444;">Fiyatlar Getiriliyor...</div></footer>
     </div>
 
     <script>
-        // Senin yeni anahtarın
         const API_KEY = '2b2c3d9c14msha336e30c4297af7p1958ecjsnf77059e7c5c0'; 
         const API_URL = 'https://harem-altin-live-gold-price-data.p.rapidapi.com/harem_altin/prices/23b4c2fb31a242d1eebc0df9b9b65e5e';
 
         async function fetchPrices() {
             try {
-                // GitHub engeline takılmamak için bu proxy zorunlu
-                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`, {
-                    headers: { 
-                        'x-rapidapi-key': API_KEY, 
-                        'x-rapidapi-host': 'harem-altin-live-gold-price-data.p.rapidapi.com' 
-                    }
+                // Daha hızlı bir proxy köprüsü deniyoruz
+                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}&timestamp=${new Date().getTime()}`, {
+                    headers: { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'harem-altin-live-gold-price-data.p.rapidapi.com' }
                 });
                 const wrapper = await response.json();
                 const result = JSON.parse(wrapper.contents);
@@ -57,7 +53,6 @@
                     if (item) {
                         let alis = parseFloat(item.alis.replace('.', '').replace(',', '.'));
                         let satis = parseFloat(item.satis.replace('.', '').replace(',', '.'));
-                        // Altın grubu makas farkı
                         if(!id.includes('TRY')) { alis -= 20; satis += 200; }
                         
                         const icon = item.direction === 'up' ? '<span class="up">▲</span>' : '<span class="down">▼</span>';
@@ -65,13 +60,13 @@
                         document.querySelector(`#${id} .sell`).innerHTML = satis.toLocaleString('tr-TR', {minimumFractionDigits: 2}) + icon;
                     }
                 });
-                document.getElementById('status').innerText = "Canlı Güncelleme: " + new Date().toLocaleTimeString('tr-TR');
+                document.getElementById('status').innerText = "Canlı: " + new Date().toLocaleTimeString('tr-TR');
             } catch (e) {
-                document.getElementById('status').innerText = "Bağlantı Kontrol Ediliyor...";
+                document.getElementById('status').innerText = "Bağlantı Tazeleniyor...";
             }
         }
         fetchPrices();
-        setInterval(fetchPrices, 30000); // 30 saniyede bir güncelle
+        setInterval(fetchPrices, 15000); // 15 saniyede bir daha hızlı kontrol
     </script>
 </body>
 </html>
