@@ -1,113 +1,173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ege Gold Kuyumculuk | Canlı Fiyatlar</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ege Gold Kuyumculuk - Canlı Panel</title>
+    <style>
+        :root { --gold: #d4af37; --bg: #000000; --panel: #141414; --text: #ffffff; --up: #00ff7f; --down: #ff4d4d; }
+        
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 10px;
+            display: flex; 
+            justify-content: center; 
+        }
 
-<style>
-html, body{
-    margin:0;
-    padding:0;
-    height:100%;
-    overflow:hidden;
-    font-family: Arial, Helvetica, sans-serif;
-}
+        .board { 
+            width: 100%; 
+            max-width: 950px; 
+            background: var(--panel); 
+            border: 3px solid var(--gold); 
+            border-radius: 15px; 
+            overflow: hidden; 
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
+            position: relative; /* Butonun konumlanması için */
+        }
 
-/* ALTIN ARKAPLAN */
-body{
-    background: linear-gradient(135deg,#d4af37,#f7e7a1,#c9a227);
-    display:flex;
-    flex-direction:column;
-}
+        header { 
+            background: linear-gradient(180deg, #d4af37, #b8860b); 
+            color: #000; 
+            padding: 25px 10px; 
+            text-align: center; 
+            font-size: clamp(22px, 6vw, 42px); 
+            font-weight: 900; 
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
 
-/* ÜST ALAN */
-.header{
-    position:relative;
-    text-align:center;
-    padding:25px 10px;
-    background: linear-gradient(90deg,#8a6a00,#d4af37);
-    color:white;
-    font-size:42px;
-    font-weight:900;
-    letter-spacing:2px;
-    box-shadow:0 5px 20px rgba(0,0,0,0.25);
-}
+        /* Yenile Butonu - Sağ Alt Köşeye Taşındı */
+        .refresh-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: 0.3s;
+            z-index: 100;
+        }
+        .refresh-btn:hover { background: var(--gold); color: #000; }
 
-.sub{
-    font-size:18px;
-    font-weight:500;
-    margin-top:8px;
-    opacity:0.9;
-}
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 
-/* YENİLE BUTONU */
-.refresh-btn{
-    position:absolute;
-    right:30px;
-    top:30px;
-    background:white;
-    color:#8a6a00;
-    border:none;
-    padding:12px 20px;
-    font-size:16px;
-    font-weight:700;
-    border-radius:10px;
-    cursor:pointer;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-    transition:0.2s;
-}
+        th { 
+            background: #222; 
+            color: var(--gold); 
+            padding: 15px 5px; 
+            text-align: center; 
+            font-size: clamp(14px, 3vw, 18px);
+            border-bottom: 3px solid #333;
+            letter-spacing: 2px;
+        }
 
-.refresh-btn:hover{
-    transform:scale(1.05);
-}
+        td { 
+            padding: 12px 5px; 
+            border-bottom: 1px solid #2a2a2a; 
+            font-size: clamp(16px, 3.5vw, 24px); 
+            font-weight: 700; 
+            text-align: center;
+        }
 
-/* İFRAME */
-.content{
-    flex:1;
-}
+        td:first-child, th:first-child { text-align: left; padding-left: 20px; width: 42%; }
 
-iframe{
-    width:100%;
-    height:100%;
-    border:none;
-}
+        .price-container { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .price { font-family: 'Consolas', monospace; }
+        .trend { font-size: 0.8em; }
+        .up { color: var(--up); }
+        .down { color: var(--down); }
 
-/* ALT */
-.footer{
-    text-align:center;
-    padding:10px;
-    font-size:14px;
-    background:rgba(0,0,0,0.1);
-}
-</style>
+        .section-header {
+            background: #1f1f1f;
+            color: var(--gold);
+            text-align: center;
+            font-size: clamp(12px, 2.5vw, 15px);
+            letter-spacing: 4px;
+            font-weight: bold;
+            height: 45px;
+        }
+
+        footer {
+            padding: 25px;
+            font-size: 20px;
+            color: var(--gold);
+            text-align: center;
+            background: #0a0a0a;
+            border-top: 1px solid #333;
+            font-weight: bold;
+            letter-spacing: 6px;
+        }
+
+        .update-text { font-size: 11px; color: #555; margin-top: 5px; font-weight: normal; letter-spacing: 1px; }
+
+        /* Parlama Efekti */
+        .flash { animation: flash-gold 0.7s; }
+        @keyframes flash-gold { 0% { background: rgba(212, 175, 55, 0.4); } 100% { background: transparent; } }
+    </style>
 </head>
-
 <body>
 
-<div class="header">
-    EGE GOLD KUYUMCULUK
-    <div class="sub">Anlık Altın & Döviz Fiyatları</div>
+<div class="board">
+    <header>Ege Gold Kuyumculuk</header>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ÜRÜN LİSTESİ</th>
+                <th>ALIŞ</th>
+                <th>SATIŞ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="section-header"><td colspan="3">ALTIN GRUBU</td></tr>
+            <tr><td>24 Ayar Gram</td><td><div class="price-container"><span class="price">6.629,44</span><span class="trend up">▲</span></div></td><td><div class="price-container"><span class="price">7.215,66</span><span class="trend up">▲</span></div></td></tr>
+            <tr><td>22 Ayar Gram</td><td><div class="price-container"><span class="price">6.061,10</span><span class="trend down">▼</span></div></td><td><div class="price-container"><span class="price">6.811,72</span><span class="trend down">▼</span></div></td></tr>
+            <tr><td>14 Ayar Altın</td><td><div class="price-container"><span class="price">3.641,14</span><span class="trend down">▼</span></div></td><td><div class="price-container"><span class="price">5.237,49</span><span class="trend down">▼</span></div></td></tr>
+            <tr><td>Yeni Çeyrek</td><td><div class="price-container"><span class="price">10.860</span><span class="trend up">▲</span></div></td><td><div class="price-container"><span class="price">11.688</span><span class="trend up">▲</span></div></td></tr>
+            <tr><td>Eski Çeyrek</td><td><div class="price-container"><span class="price">10.860</span><span class="trend down">▼</span></div></td><td><div class="price-container"><span class="price">11.619</span><span class="trend down">▼</span></div></td></tr>
+            <tr><td>Yeni Yarım</td><td><div class="price-container"><span class="price">21.720</span><span class="trend up">▲</span></div></td><td><div class="price-container"><span class="price">23.307</span><span class="trend up">▲</span></div></td></tr>
+            <tr><td>Eski Yarım</td><td><div class="price-container"><span class="price">21.500</span><span class="trend up">▲</span></div></td><td><div class="price-container"><span class="price">22.900</span><span class="trend up">▲</span></div></td></tr>
+            <tr><td>Yeni Tam</td><td><div class="price-container"><span class="price">43.440</span><span class="trend down">▼</span></div></td><td><div class="price-container"><span class="price">45.839</span><span class="trend down">▼</span></div></td></tr>
+            <tr><td>Eski Tam</td><td><div class="price-container"><span class="price">43.000</span><span class="trend down">▼</span></div></td><td><div class="price-container"><span class="price">45.500</span><span class="trend down">▼</span></div></td></tr>
+            <tr><td>Ata 5'li</td><td><div class="price-container"><span class="price">221.070</span><span class="trend up">▲</span></div></td><td><div class="price-container"><span class="price">237.060</span><span class="trend up">▲</span></div></td></tr>
 
-    <button class="refresh-btn" onclick="yenile()">Yenile</button>
-</div>
+            <tr class="section-header"><td colspan="3">DÖVİZ VE GÜMÜŞ</td></tr>
+            <tr><td>Gümüş TL</td><td><div class="price-container"><span class="price">95,05</span><span class="trend up">▲</span></div></td><td><div class="price-container"><span class="price">113,67</span><span class="trend up">▲</span></div></td></tr>
+            <tr><td>Dolar (USD)</td><td><div class="price-container"><span class="price">44,40</span><span class="trend down">▼</span></div></td><td><div class="price-container"><span class="price">44,80</span><span class="trend down">▼</span></div></td></tr>
+            <tr><td>Euro (EUR)</td><td><div class="price-container"><span class="price">51,41</span><span class="trend up">▲</span></div></td><td><div class="price-container"><span class="price">51,81</span><span class="trend up">▲</span></div></td></tr>
+        </tbody>
+    </table>
 
-<div class="content">
-    <iframe id="priceFrame" src="https://sukobfiyat.com/mobil.html"></iframe>
-</div>
+    <footer>
+        ŞANLIURFA
+        <div class="update-text">Otomatik güncelleme: 2 dk.</div>
+    </footer>
 
-<div class="footer">
-    Fiyatlar bilgilendirme amaçlıdır.
+    <button class="refresh-btn" onclick="manualRefresh()">↻ YENİLE</button>
 </div>
 
 <script>
-function yenile(){
-    document.getElementById("priceFrame").src =
-        "https://sukobfiyat.com/mobil.html?ts=" + new Date().getTime();
-}
+    function manualRefresh() {
+        const cells = document.querySelectorAll('td');
+        cells.forEach(cell => {
+            cell.classList.remove('flash');
+            void cell.offsetWidth; 
+            cell.classList.add('flash');
+        });
+        console.log("Veriler yenilendi.");
+    }
 
-/* 60 saniyede otomatik yenile */
-setInterval(yenile, 60000);
+    // 2 dakikada bir otomatik yenile (120.000 ms)
+    setInterval(manualRefresh, 120000);
 </script>
 
 </body>
