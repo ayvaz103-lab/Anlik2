@@ -30,19 +30,22 @@
                 <tr id="EURTRY"><td>Euro (EUR)</td><td class="buy">---</td><td class="sell">---</td></tr>
             </tbody>
         </table>
-        <footer>ŞANLIURFA<div id="status" style="font-size: 1.5vh; color: #444;">Canlı Bağlantı Kuruluyor...</div></footer>
+        <footer>ŞANLIURFA<div id="status" style="font-size: 1.5vh; color: #444;">Canlı Veriler Yükleniyor...</div></footer>
     </div>
 
     <script>
-        // Senin kodlarından aldığım anahtar ve adres
-        const API_KEY = '23b4c2fb31a242d1eebc0df9b9b65e5e'; 
+        // Senin yeni anahtarın
+        const API_KEY = '2b2c3d9c14msha336e30c4297af7p1958ecjsnf77059e7c5c0'; 
         const API_URL = 'https://harem-altin-live-gold-price-data.p.rapidapi.com/harem_altin/prices/23b4c2fb31a242d1eebc0df9b9b65e5e';
 
         async function fetchPrices() {
             try {
-                // Güvenlik engelini aşmak için proxy kullanımı
+                // GitHub engeline takılmamak için bu proxy zorunlu
                 const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`, {
-                    headers: { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'harem-altin-live-gold-price-data.p.rapidapi.com' }
+                    headers: { 
+                        'x-rapidapi-key': API_KEY, 
+                        'x-rapidapi-host': 'harem-altin-live-gold-price-data.p.rapidapi.com' 
+                    }
                 });
                 const wrapper = await response.json();
                 const result = JSON.parse(wrapper.contents);
@@ -54,20 +57,21 @@
                     if (item) {
                         let alis = parseFloat(item.alis.replace('.', '').replace(',', '.'));
                         let satis = parseFloat(item.satis.replace('.', '').replace(',', '.'));
+                        // Altın grubu makas farkı
                         if(!id.includes('TRY')) { alis -= 20; satis += 200; }
                         
                         const icon = item.direction === 'up' ? '<span class="up">▲</span>' : '<span class="down">▼</span>';
-                        document.querySelector(`#${id} .buy`).innerHTML = alis.toLocaleString('tr-TR') + icon;
-                        document.querySelector(`#${id} .sell`).innerHTML = satis.toLocaleString('tr-TR') + icon;
+                        document.querySelector(`#${id} .buy`).innerHTML = alis.toLocaleString('tr-TR', {minimumFractionDigits: 2}) + icon;
+                        document.querySelector(`#${id} .sell`).innerHTML = satis.toLocaleString('tr-TR', {minimumFractionDigits: 2}) + icon;
                     }
                 });
-                document.getElementById('status').innerText = "Son Güncelleme: " + new Date().toLocaleTimeString();
+                document.getElementById('status').innerText = "Canlı Güncelleme: " + new Date().toLocaleTimeString('tr-TR');
             } catch (e) {
-                document.getElementById('status').innerText = "Yenileniyor...";
+                document.getElementById('status').innerText = "Bağlantı Kontrol Ediliyor...";
             }
         }
         fetchPrices();
-        setInterval(fetchPrices, 30000); 
+        setInterval(fetchPrices, 30000); // 30 saniyede bir güncelle
     </script>
 </body>
 </html>
