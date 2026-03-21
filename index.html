@@ -10,11 +10,11 @@
         .board { width: 98%; height: 96vh; background: var(--panel); border: 3px solid var(--gold); border-radius: 15px; display: flex; flex-direction: column; }
         header { background: linear-gradient(180deg, #d4af37, #b8860b); color: #000; padding: 2vh 0; text-align: center; font-size: 6vh; font-weight: 900; text-transform: uppercase; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; flex-grow: 1; }
-        th { color: var(--gold); font-size: 2vh; border-bottom: 2px solid #333; padding: 1vh; }
-        td { border-bottom: 1px solid #2a2a2a; font-size: 3.5vh; font-weight: 700; text-align: center; padding: 1vh 0; }
-        td:first-child { text-align: left; padding-left: 4vw; width: 40%; color: #efefef; }
+        th { color: var(--gold); font-size: 2.2vh; border-bottom: 2px solid #333; padding: 1vh; text-transform: uppercase; }
+        td { border-bottom: 1px solid #2a2a2a; font-size: 3.5vh; font-weight: 700; text-align: center; padding: 1.2vh 0; }
+        td:first-child { text-align: left; padding-left: 4vw; width: 45%; color: #efefef; }
         .section-header { background: #1f1f1f; color: var(--gold); font-size: 2vh; font-weight: bold; }
-        footer { height: 12vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #0a0a0a; color: var(--gold); font-size: 4vh; letter-spacing: 5px; }
+        footer { height: 10vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #0a0a0a; color: var(--gold); font-size: 4vh; letter-spacing: 5px; border-top: 1px solid #333; }
         .up { color: var(--up); margin-left: 10px; } .down { color: var(--down); margin-left: 10px; }
     </style>
 </head>
@@ -25,25 +25,26 @@
             <thead><tr><th>ÜRÜN LİSTESİ</th><th>ALIŞ</th><th>SATIŞ</th></tr></thead>
             <tbody id="priceBody">
                 <tr class="section-header"><td colspan="3">ALTIN GRUBU</td></tr>
-                <tr id="GA"><td>24 Ayar Gram</td><td class="buy">Yükleniyor...</td><td class="sell">...</td></tr>
+                <tr id="GA"><td>24 Ayar Gram</td><td class="buy">...</td><td class="sell">...</td></tr>
                 <tr id="22AYAR"><td>22 Ayar Gram</td><td class="buy">...</td><td class="sell">...</td></tr>
                 <tr id="14AYAR"><td>14 Ayar Altın</td><td class="buy">...</td><td class="sell">...</td></tr>
                 <tr id="CEYREK_YENI"><td>Yeni Çeyrek</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="CEYREK_ESKI"><td>Eski Çeyrek</td><td class="buy">...</td><td class="sell">...</td></tr>
                 <tr id="ATA5_YENI"><td>Ata 5'li</td><td class="buy">...</td><td class="sell">...</td></tr>
                 <tr class="section-header"><td colspan="3">DÖVİZ VE GÜMÜŞ</td></tr>
-                <tr id="USDTRY"><td>Dolar (USD)</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="EURTRY"><td>Euro (EUR)</td><td class="buy">---</td><td class="sell">---</td></tr>
-                <tr id="GUMUSTRY"><td>Gümüş TL</td><td class="buy">---</td><td class="sell">---</td></tr>
+                <tr id="USDTRY"><td>Dolar (USD)</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="EURTRY"><td>Euro (EUR)</td><td class="buy">...</td><td class="sell">...</td></tr>
+                <tr id="GUMUSTRY"><td>Gümüş TL</td><td class="buy">...</td><td class="sell">...</td></tr>
             </tbody>
         </table>
-        <footer>ŞANLIURFA<div id="status" style="font-size: 1.5vh; color: #555;">Bağlanıyor...</div></footer>
+        <footer>ŞANLIURFA<div id="status" style="font-size: 1.5vh; color: #555; letter-spacing: 1px;">Bağlanıyor...</div></footer>
     </div>
 
     <script>
         async function fetchPrices() {
-            // CORS engelini aşmak için AllOrigins proxy kullanıyoruz
-            const target = 'https://harem-altin-live-gold-price-data.p.rapidapi.com/harem_altin/prices/23b4c2fb31a242d1eebc0df9b9b65e5e';
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+            const apiTarget = 'https://harem-altin-live-gold-price-data.p.rapidapi.com/harem_altin/prices/23b4c2fb31a242d1eebc0df9b9b65e5e';
+            // GitHub'daki güvenlik engelini aşmak için proxy kullanımı
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiTarget)}`;
             
             try {
                 const response = await fetch(proxyUrl, {
@@ -56,23 +57,27 @@
                 const result = JSON.parse(wrapper.contents);
                 const data = result.data;
 
-                const items = ['GA', '22AYAR', '14AYAR', 'CEYREK_YENI', 'ATA5_YENI', 'USDTRY', 'EURTRY', 'GUMUSTRY'];
+                const items = ['GA', '22AYAR', '14AYAR', 'CEYREK_YENI', 'CEYREK_ESKI', 'ATA5_YENI', 'USDTRY', 'EURTRY', 'GUMUSTRY'];
                 items.forEach(id => {
                     const item = data[id];
                     if (item) {
                         let alis = parseFloat(item.alis.replace('.', '').replace(',', '.'));
                         let satis = parseFloat(item.satis.replace('.', '').replace(',', '.'));
-                        // Makas Hesabı (Alış -20, Satış +200) - Dövizler hariç
-                        if(!id.includes('TRY')) { alis -= 20; satis += 200; }
+                        
+                        // Altın grubu için makas farkı (Dövizler hariç)
+                        if(!id.includes('TRY')) { 
+                            alis -= 20; // Alış -20 TL
+                            satis += 200; // Satış +200 TL
+                        }
                         
                         const icon = item.direction === 'up' ? '<span class="up">▲</span>' : '<span class="down">▼</span>';
                         document.querySelector(`#${id} .buy`).innerHTML = alis.toLocaleString('tr-TR', {minimumFractionDigits: 2}) + icon;
                         document.querySelector(`#${id} .sell`).innerHTML = satis.toLocaleString('tr-TR', {minimumFractionDigits: 2}) + icon;
                     }
                 });
-                document.getElementById('status').innerText = "Canlı Veri Aktif: " + new Date().toLocaleTimeString();
+                document.getElementById('status').innerText = "Son Güncelleme: " + new Date().toLocaleTimeString();
             } catch (e) {
-                document.getElementById('status').innerText = "Bağlantı Sorunu! Yeniden deneniyor...";
+                document.getElementById('status').innerText = "Bağlantı Hatası! Yeniden deneniyor...";
             }
         }
         fetchPrices();
